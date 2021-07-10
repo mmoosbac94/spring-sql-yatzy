@@ -11,8 +11,8 @@ class MainController {
     private lateinit var playerRepository: PlayerRepository
 
     @RequestMapping(path = ["/add"], method = [RequestMethod.POST])
-    fun addNewUser(@RequestBody player: Player) {
-        playerRepository.save(player)
+    fun addNewUser(@RequestBody player: Player) : Player {
+        return playerRepository.save(player)
     }
 
     @RequestMapping(path = ["/all"], method = [RequestMethod.GET])

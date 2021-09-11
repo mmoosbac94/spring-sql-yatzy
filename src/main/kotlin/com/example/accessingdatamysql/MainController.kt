@@ -20,18 +20,20 @@ class MainController {
 //    }
 
     @RequestMapping(path = ["/update"], method = [RequestMethod.PUT])
-    fun updatePlayerByName(@RequestBody player: Player): ResponseEntity<Player> {
-        val playerResult: Optional<Player> = playerRepository.findByName(player.name)
-        if(!playerResult.isPresent) {
-            playerRepository.save(player)
-            throw Exception("Der entsprechende Spieler konnte nicht gefunden werden und wurde deshalb neu angelegt.")
-        } else {
-            playerResult.get().wins = player.wins
-            playerResult.get().maxendSum = player.maxendSum
-            val updatedPlayer = playerRepository.save(playerResult.get())
-            return ResponseEntity.ok(updatedPlayer)
+    fun updatePlayerByName(@RequestBody players: List<Player>): ResponseEntity<Player?> {
+        var updatedPlayer: Player? = null
+        players.forEach { player ->
+            val playerResult: Optional<Player> = playerRepository.findByName(player.name)
+            if (!playerResult.isPresent) {
+                playerRepository.save(player)
+                throw Exception("Der entsprechende Spieler konnte nicht gefunden werden und wurde deshalb neu angelegt.")
+            } else {
+                playerResult.get().wins = player.wins
+                playerResult.get().maxendSum = player.maxendSum
+                updatedPlayer = playerRepository.save(playerResult.get())
+            }
         }
-
+        return ResponseEntity.ok(updatedPlayer)
     }
 
     @RequestMapping(path = ["/all"], method = [RequestMethod.GET])

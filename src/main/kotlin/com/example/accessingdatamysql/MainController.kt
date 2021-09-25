@@ -26,7 +26,6 @@ class MainController {
             val playerResult: Optional<Player> = playerRepository.findByName(player.name)
             if (!playerResult.isPresent) {
                 playerRepository.save(player)
-                throw Exception("Der entsprechende Spieler konnte nicht gefunden werden und wurde deshalb neu angelegt.")
             } else {
                 playerResult.get().wins = player.wins
                 playerResult.get().maxendSum = player.maxendSum
@@ -34,6 +33,12 @@ class MainController {
             }
         }
         return ResponseEntity.ok(updatedPlayer)
+    }
+
+    @RequestMapping(path = ["/highscore"], method = [RequestMethod.GET])
+    fun getHighScore(): Int {
+        val players = getAllPlayers()
+        return players.maxOf { it.maxendSum }
     }
 
     @RequestMapping(path = ["/all"], method = [RequestMethod.GET])

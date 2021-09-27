@@ -19,6 +19,7 @@ class MainController {
 //        return playerRepository.save(player)
 //    }
 
+
     @RequestMapping(path = ["/update"], method = [RequestMethod.PUT])
     fun updatePlayerByName(@RequestBody players: List<Player>): ResponseEntity<Player?> {
         var updatedPlayer: Player? = null
@@ -27,8 +28,10 @@ class MainController {
             if (!playerResult.isPresent) {
                 playerRepository.save(player)
             } else {
-                playerResult.get().wins = player.wins
-                playerResult.get().maxendSum = player.maxendSum
+                playerResult.get().wins += player.wins
+                if(playerResult.get().maxendSum < player.maxendSum) {
+                    playerResult.get().maxendSum = player.maxendSum
+                }
                 updatedPlayer = playerRepository.save(playerResult.get())
             }
         }

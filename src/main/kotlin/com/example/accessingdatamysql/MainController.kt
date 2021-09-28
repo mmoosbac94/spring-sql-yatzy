@@ -22,6 +22,7 @@ class MainController {
 
     @RequestMapping(path = ["/update"], method = [RequestMethod.PUT])
     fun updatePlayerByName(@RequestBody players: List<Player>): ResponseEntity<Player?> {
+        
         var updatedPlayer: Player? = null
         players.forEach { player ->
             val playerResult: Optional<Player> = playerRepository.findByName(player.name)

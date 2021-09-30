@@ -23,6 +23,7 @@ class MainController {
     @RequestMapping(path = ["/update"], method = [RequestMethod.PUT])
     fun updatePlayerByName(@RequestBody players: List<Player>): ResponseEntity<Player?> {
         
+
         var updatedPlayer: Player? = null
         players.forEach { player ->
             val playerResult: Optional<Player> = playerRepository.findByName(player.name)
@@ -42,7 +43,11 @@ class MainController {
     @RequestMapping(path = ["/highscore"], method = [RequestMethod.GET])
     fun getHighScore(): Int {
         val players = getAllPlayers()
-        return players.maxOf { it.maxendSum }
+        return if(players.toList().isEmpty()) {
+            0
+        } else {
+            players.maxOf { it.maxendSum }
+        }
     }
 
     @RequestMapping(path = ["/all"], method = [RequestMethod.GET])
